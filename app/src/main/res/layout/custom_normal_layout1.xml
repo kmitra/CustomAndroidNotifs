@@ -3,8 +3,9 @@
     android:id="@+id/layout"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/curtain_red"
-    android:padding="5dp">
+    android:background="@drawable/custom_normal_bg_tile1"
+    android:padding="5dp"
+    android:touchscreenBlocksFocus="false">
 
     <ImageView android:id="@+id/normal_layout1_image"
         android:layout_width="wrap_content"
@@ -35,5 +36,6 @@
         android:layout_below="@id/normal_layout1_title"
         style="Custom Notification Text"
         android:text="Temp Content"
-        android:textColor="@color/foreground_material_dark" />
+        android:textColor="@color/foreground_material_dark"
+        android:linksClickable="false" />
 </RelativeLayout>
