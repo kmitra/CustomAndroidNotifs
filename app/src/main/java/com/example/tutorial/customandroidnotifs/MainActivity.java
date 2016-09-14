@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
 
         RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.custom_normal_layout1);
         contentView.setImageViewResource(R.id.normal_layout1_image, R.drawable.icon48x48);
-        contentView.setTextViewText(R.id.normal_layout1_title, "Custom notification");
+        contentView.setTextViewText(R.id.normal_layout1_title, "Custom Notification");
         contentView.setTextViewText(R.id.normal_layout1_text, "This is a custom layout");
 
         notification.contentView = contentView;
@@ -88,8 +88,8 @@ public class MainActivity extends AppCompatActivity {
 
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(this);
         mBuilder.setSmallIcon(R.drawable.icon48x48);
-        mBuilder.setContentTitle("Event tracker");
-        mBuilder.setContentText("Events received");
+        mBuilder.setContentTitle("Expanded Notification");
+        mBuilder.setContentText("Pull Me Down!");
 
         NotificationCompat.InboxStyle inboxStyle =new NotificationCompat.InboxStyle();
 
@@ -98,11 +98,17 @@ public class MainActivity extends AppCompatActivity {
 
         RemoteViews contentView = new RemoteViews(getPackageName(), R.layout.custom_normal_layout1);
         contentView.setImageViewResource(R.id.normal_layout1_image, R.drawable.icon48x48);
-        contentView.setTextViewText(R.id.normal_layout1_title, "Custom notification");
-        contentView.setTextViewText(R.id.normal_layout1_text, "This is a custom layout");
+        contentView.setTextViewText(R.id.normal_layout1_title, "Expanded Notification");
+        contentView.setTextViewText(R.id.normal_layout1_text, "Pull Me Down!");
+
+        RemoteViews bigContentView = new RemoteViews(getPackageName(), R.layout.custom_expanded_layout1);
+        bigContentView.setImageViewResource(R.id.expanded_layout1_image, R.drawable.icon48x48);
+        bigContentView.setTextViewText(R.id.expanded_layout1_title, "Expanded Notification");
+        bigContentView.setTextViewText(R.id.expanded_layout1_text, "This is an expanded layout");
 
         Notification notification = mBuilder.build();
-        notification.bigContentView = contentView;
+        notification.contentView = contentView;
+        notification.bigContentView = bigContentView;
 
         Intent notificationIntent = new Intent(this, MainActivity.class);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
