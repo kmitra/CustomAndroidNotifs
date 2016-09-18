@@ -1,1 +1,1 @@
-include ':app', ':customnotifslib'
+include ':app'
