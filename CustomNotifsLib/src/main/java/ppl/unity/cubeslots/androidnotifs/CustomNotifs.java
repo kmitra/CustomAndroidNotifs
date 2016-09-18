@@ -1,17 +1,32 @@
 package ppl.unity.cubeslots.androidnotifs;
 
-import android.app.Activity;
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Intent;
-
 /**
  * Created by Ginma on 18/09/16.
  */
 public class CustomNotifs {
 
-//    public int scheduleNotification(long secondsFromNow, String title, String subtitle, String tickerText, String data, String smallIcon, String largeIcon, int requestCode)
-//    {
+    protected static String TAG = "CustomNotifs";
+    protected static CustomNotifs _instance;
+
+    public static CustomNotifs instance()
+    {
+        if (_instance == null)
+        {
+            _instance = new CustomNotifs();
+        }
+        return _instance;
+    }
+
+    public CustomNotifs() {
+
+    }
+
+    public int scheduleNotification(long secondsFromNow, String title, String subtitle, String tickerText, String data, String smallIcon, String largeIcon, int requestCode)
+    {
+//        Resources res = context.getResources();
+//        int icon = res.getIdentifier("IMAGE_NAME", "drawable", "package_name_here");
+
+        // From Etcetera Android
 //        Activity context = getActivity();
 //        Intent intent = new Intent(context, AlarmManagerReceiver.class);
 //        intent.putExtra("title", title);
@@ -35,6 +50,6 @@ public class CustomNotifs {
 //        AlarmManager alarmManager = (AlarmManager)context.getSystemService("alarm");
 //        alarmManager.set(1, System.currentTimeMillis() + secondsFromNow * 1000L, pendingIntent);
 //
-//        return requestCode;
-//    }
+        return requestCode;
+    }
 }
