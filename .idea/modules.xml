@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/CustomAndroidNotifs.iml" filepath="$PROJECT_DIR$/CustomAndroidNotifs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/CustomNotifsLib/CustomNotifsLib.iml" filepath="$PROJECT_DIR$/CustomNotifsLib/CustomNotifsLib.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
