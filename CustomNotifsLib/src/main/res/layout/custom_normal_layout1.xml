@@ -26,7 +26,7 @@
         android:layout_toEndOf="@id/normal_layout1_image"
         style="Custom Notification Title"
         android:text="Temp Title"
-        android:textColor="@color/foreground_material_dark"
+        android:textColor="@android:color/white"
         android:textStyle="bold" />
 
     <TextView android:id="@+id/normal_layout1_text"
@@ -36,6 +36,6 @@
         android:layout_below="@id/normal_layout1_title"
         style="Custom Notification Text"
         android:text="Temp Content"
-        android:textColor="@color/foreground_material_dark"
+        android:textColor="@android:color/white"
         android:linksClickable="false" />
 </RelativeLayout>
