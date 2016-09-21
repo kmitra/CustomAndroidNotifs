@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:background="@drawable/custom_normal_bg_tile2"
     android:padding="5dp"
-    android:touchscreenBlocksFocus="false">
+    android:touchscreenBlocksFocus="false"
+    android:minHeight="@android:dimen/app_icon_size">
 
     <ImageView android:id="@+id/normal_layout2_image"
         android:layout_width="wrap_content"
