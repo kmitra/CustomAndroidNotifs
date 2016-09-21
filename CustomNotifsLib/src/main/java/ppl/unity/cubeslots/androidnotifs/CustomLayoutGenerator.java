@@ -47,7 +47,7 @@ public class CustomLayoutGenerator {
         else {
             SharedPreferences prefs = SwrveGcmDeviceRegistration.getGCMPreferences(context);
             String appTitle = prefs.getString("app_title", "Configure your app title");
-            contentView.setTextViewText(R.id.normal_layout2_text, appTitle);
+            contentView.setTextViewText(R.id.normal_layout2_title, appTitle);
         }
 
         if (bundle.containsKey("text"))
@@ -71,7 +71,7 @@ public class CustomLayoutGenerator {
         else {
             SharedPreferences prefs = SwrveGcmDeviceRegistration.getGCMPreferences(context);
             String appTitle = prefs.getString("app_title", "Configure your app title");
-            contentView.setTextViewText(R.id.normal_layout2_text, appTitle);
+            contentView.setTextViewText(R.id.normal_layout2_title, appTitle);
         }
 
         if (bundle.containsKey("text"))
