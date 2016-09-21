@@ -210,29 +210,9 @@ public class AlarmManagerReceiver extends BroadcastReceiver {
         noteBuilder.setWhen(System.currentTimeMillis());
 
         Notification notification = noteBuilder.build();
-        notification.contentView = makeCustomNormalLayout(context, bundle);
+        notification.contentView = CustomLayoutGenerator.getInstance().makeCustomNormalLayout(context, bundle);
 
         noteManager.notify(requestCodeAndNotificationId, notification);
         Log.i(TAG, "notification posted with requestCode/notification Id: " + requestCodeAndNotificationId);
-    }
-
-    private RemoteViews makeCustomNormalLayout(Context context, Bundle bundle) {
-
-        RemoteViews contentView = new RemoteViews(context.getPackageName(), R.layout.custom_normal_layout1);
-        contentView.setImageViewResource(R.id.normal_layout1_image, R.drawable.icon48x48);
-
-        if (bundle.containsKey("title"))
-            contentView.setTextViewText(R.id.normal_layout1_title, bundle.getString("title"));
-        else {
-            contentView.setTextViewText(R.id.normal_layout1_title, "Default title (title parameter not sent with notification)");
-        }
-
-        if (bundle.containsKey("subtitle"))
-            contentView.setTextViewText(R.id.normal_layout1_text, bundle.getString("subtitle"));
-        else {
-            contentView.setTextViewText(R.id.normal_layout1_text, "Default subtitle (subtitle parameter not sent with notification)");
-        }
-
-        return contentView;
     }
 }
