@@ -17,13 +17,6 @@ public class CustomSwrveGcmIntentService extends SwrveGcmIntentService{
     }
 
     @Override
-    public NotificationCompat.Builder createNotificationBuilder(String msgText, Bundle msg)
-    {
-        NotificationCompat.Builder builder = super.createNotificationBuilder(msgText, msg);
-        return builder;
-    }
-
-    @Override
     public Notification createNotification(Bundle msg, PendingIntent contentIntent) {
 
         String msgText = msg.getString("text");
