@@ -1,6 +1,7 @@
 package ppl.unity.cubeslots.androidnotifs;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -13,6 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -209,10 +211,22 @@ public class AlarmManagerReceiver extends BroadcastReceiver {
         noteBuilder.setTicker(tickerText);
         noteBuilder.setWhen(System.currentTimeMillis());
 
+        noteBuilder.setStyle(new NotificationCompat.BigTextStyle());
+
         Notification notification = noteBuilder.build();
         notification.contentView = CustomLayoutGenerator.getInstance().makeCustomNormalLayout(context, bundle);
 
+        if (Build.VERSION.SDK_INT >= 19)
+            notification = customizeBigContentView(notification, context, bundle);
+
         noteManager.notify(requestCodeAndNotificationId, notification);
         Log.i(TAG, "notification posted with requestCode/notification Id: " + requestCodeAndNotificationId);
+    }
+
+    @TargetApi(19)
+    private Notification customizeBigContentView(Notification notification, Context context, Bundle msg)
+    {
+        notification.bigContentView = CustomLayoutGenerator.getInstance().makeCustomNormalLayout(context, msg);
+        return notification;
     }
 }
