@@ -3,7 +3,9 @@ package ppl.unity.cubeslots.androidnotifs;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.util.Log;
 
 import com.prime31.EtceteraPlugin;
@@ -15,6 +17,8 @@ public class CustomNotifs {
 
     protected static String TAG = "CustomNotifs";
     protected static CustomNotifs _instance;
+    private static String KEY_FLAG_USE_CUSTOM_LAYOUT = "KEY_FLAG_USE_CUSTOM_LAYOUT";
+
     protected Class<?> _unityPlayerClass;
     protected Field _unityPlayerActivityField;
     private Method _unitySendMessageMethod;
@@ -95,5 +99,20 @@ public class CustomNotifs {
         alarmManager.set(1, System.currentTimeMillis() + secondsFromNow * 1000L, pendingIntent);
 
         return requestCode;
+    }
+
+    public void setCustomLayoutPrefs(boolean useCustomLayout) {
+
+        Activity context = getActivity();
+        SharedPreferences preferences = context.getSharedPreferences("PCSPrefs", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(KEY_FLAG_USE_CUSTOM_LAYOUT, useCustomLayout);
+        editor.apply();
+    }
+
+    public boolean getCustomLayoutPrefs(Context context) {
+
+        SharedPreferences preferences = context.getSharedPreferences("PCSPrefs", Context.MODE_PRIVATE);
+        return preferences.getBoolean(KEY_FLAG_USE_CUSTOM_LAYOUT, false);
     }
 }
