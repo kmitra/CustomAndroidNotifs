@@ -18,7 +18,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.RemoteViews;
 
 import com.prime31.EtceteraPlugin;
 
@@ -51,8 +50,9 @@ public class AlarmManagerReceiver extends BroadcastReceiver {
     }
 
     @SuppressLint({"NewApi"})
-    private void sendNotification(Context context, Bundle bundle)
-    {
+    private void sendNotification(Context context, Bundle bundle) {
+
+        boolean useCustomLayout = CustomNotifs.instance().getCustomLayoutPrefs(context);
         int requestCodeAndNotificationId = bundle.getInt("requestCode");
 
         String launchClassName = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName()).getComponent().getClassName();
@@ -62,7 +62,7 @@ public class AlarmManagerReceiver extends BroadcastReceiver {
         notificationIntent.putExtra("notificationData", bundle.getString("data"));
         PendingIntent pendingIntent = PendingIntent.getActivity(context, requestCodeAndNotificationId, notificationIntent, 268435456);
 
-        NotificationManager noteManager = (NotificationManager)context.getSystemService("notification");
+        NotificationManager noteManager = (NotificationManager) context.getSystemService("notification");
         NotificationCompat.Builder noteBuilder = new NotificationCompat.Builder(context);
 
         noteBuilder.setContentIntent(pendingIntent);
@@ -81,72 +81,57 @@ public class AlarmManagerReceiver extends BroadcastReceiver {
             noteBuilder.setContentText("Default subtitle (subtitle parameter not sent with notification)");
         }
 
-        if (bundle.containsKey("smallIcon"))
-        {
+        if (bundle.containsKey("smallIcon")) {
             String smallIconPath = bundle.getString("smallIcon");
-            try
-            {
+            try {
                 Log.i(TAG, "attempting to find smallIcon resource ID dynamically...");
                 int iconId = context.getResources().getIdentifier(smallIconPath, "drawable", context.getPackageName());
-                if (iconId == 0)
-                {
+                if (iconId == 0) {
                     Log.i(TAG, "could not find small icon resource ID in main package. Checking com.prime31.Etcetera package...");
                     iconId = context.getResources().getIdentifier(smallIconPath, "drawable", "com.prime31.Etcetera");
                 }
 
                 Log.i(TAG, "smallIcon resource ID: " + iconId);
                 noteBuilder.setSmallIcon(iconId);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 Log.i(TAG, "Exception loading largeIcon via asset ID: " + e);
             }
 
         }
 
-        if (bundle.containsKey("largeIcon"))
-        {
+        if (bundle.containsKey("largeIcon")) {
             boolean didLoadIcon = false;
             String largeIconPath = bundle.getString("largeIcon");
             Log.i(TAG, "found largeIcon path: " + largeIconPath);
-            try
-            {
+            try {
                 Log.i(TAG, "attempting to find largeIcon resource ID dynamically...");
                 int iconId = context.getResources().getIdentifier(largeIconPath, "drawable", context.getPackageName());
-                if (iconId == 0)
-                {
+                if (iconId == 0) {
                     Log.i(TAG, "could not find large icon resource ID in main package. Checking com.prime31.Etcetera package...");
                     iconId = context.getResources().getIdentifier(largeIconPath, "drawable", "com.prime31.Etcetera");
                 }
 
                 Log.i(TAG, "resource ID: " + iconId);
-                if (iconId > 0)
-                {
+                if (iconId > 0) {
                     Bitmap icon = BitmapFactory.decodeResource(context.getResources(), iconId);
                     Log.i(TAG, "found large icon: " + icon);
                     noteBuilder.setLargeIcon(icon);
                     didLoadIcon = true;
                 }
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 Log.i(TAG, "Exception loading largeIcon via asset ID: " + e);
             }
 
-            if (!didLoadIcon)
-            {
+            if (!didLoadIcon) {
                 Log.i(TAG, "attempting to load icon via path...");
                 AssetManager assetManager = context.getAssets();
 
                 Bitmap bitmap = null;
-                try
-                {
+                try {
                     InputStream inputStream = assetManager.open(largeIconPath);
                     bitmap = BitmapFactory.decodeStream(inputStream);
                     noteBuilder.setLargeIcon(bitmap);
-                }
-                catch (Exception e)
-                {
+                } catch (Exception e) {
                     Log.i(TAG, "Exception loading largeIcon via InputStream: " + e);
                 }
 
@@ -158,50 +143,37 @@ public class AlarmManagerReceiver extends BroadcastReceiver {
 
         int defaults = -1;
         boolean hasSound = true;
-        if ((bundle.containsKey("vibrate")) || (bundle.containsKey("sound")))
-        {
-            try
-            {
-                if ((bundle.containsKey("vibrate")) && (!bundle.containsKey("sound")))
-                {
+        if ((bundle.containsKey("vibrate")) || (bundle.containsKey("sound"))) {
+            try {
+                if ((bundle.containsKey("vibrate")) && (!bundle.containsKey("sound"))) {
                     defaults = 2;
                     hasSound = false;
-                }
-                else if ((bundle.containsKey("sound")) && (!bundle.containsKey("vibrate")))
-                {
+                } else if ((bundle.containsKey("sound")) && (!bundle.containsKey("vibrate"))) {
                     defaults = 1;
                 }
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 Log.e(TAG, "Error fetching 'defaults' from the bundle: " + e);
             }
         }
 
         Log.i(TAG, "using notification defaults value: " + defaults);
         noteBuilder.setDefaults(defaults);
-        try
-        {
-            if (hasSound)
-            {
+        try {
+            if (hasSound) {
                 Uri soundUri = RingtoneManager.getDefaultUri(2);
-                if (soundUri == null)
-                {
+                if (soundUri == null) {
                     soundUri = RingtoneManager.getDefaultUri(4);
                     if (soundUri == null) {
                         soundUri = RingtoneManager.getDefaultUri(1);
                     }
                 }
 
-                if (soundUri != null)
-                {
+                if (soundUri != null) {
                     Log.i(TAG, "notification Uri: " + soundUri);
                     noteBuilder.setSound(soundUri);
                 }
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             Log.i(TAG, "couldn't find Uri for a sound: " + e);
         }
 
@@ -210,17 +182,26 @@ public class AlarmManagerReceiver extends BroadcastReceiver {
         }
         noteBuilder.setTicker(tickerText);
         noteBuilder.setWhen(System.currentTimeMillis());
-
         noteBuilder.setStyle(new NotificationCompat.BigTextStyle());
 
-        Notification notification = noteBuilder.build();
-        notification.contentView = CustomLayoutGenerator.getInstance().makeCustomNormalLayout(context, bundle);
+        // here, we switch with using the custom layout or using the non-customized layout
+        // depending on the flag used in creating the local notification
+        if(useCustomLayout)  {
 
-        if (Build.VERSION.SDK_INT >= 19)
-            notification = customizeBigContentView(notification, context, bundle);
+            Notification notification = noteBuilder.build();
+            notification.contentView = CustomLayoutGenerator.getInstance().makeCustomNormalLayout(context, bundle);
 
-        noteManager.notify(requestCodeAndNotificationId, notification);
-        Log.i(TAG, "notification posted with requestCode/notification Id: " + requestCodeAndNotificationId);
+            if (Build.VERSION.SDK_INT >= 19)
+                notification = customizeBigContentView(notification, context, bundle);
+
+            noteManager.notify(requestCodeAndNotificationId, notification);
+            Log.i(TAG, "notification posted with requestCode/notification Id: " + requestCodeAndNotificationId);
+        }
+        else {
+
+            noteManager.notify(requestCodeAndNotificationId, noteBuilder.build());
+            Log.i(TAG, "notification posted with requestCode/notification Id: " + requestCodeAndNotificationId);
+        }
     }
 
     @TargetApi(19)

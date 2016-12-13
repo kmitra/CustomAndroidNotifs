@@ -27,10 +27,14 @@ public class CustomSwrveGcmIntentService extends SwrveGcmIntentService{
 
             Notification notification = mBuilder.build();
             Context context = this.getApplicationContext();
-            notification.contentView = CustomLayoutGenerator.getInstance().makeCustomNormalLayoutFromPush(context, msg);
 
-            if (Build.VERSION.SDK_INT >= 19)
-                notification = customizeBigContentView(notification, context, msg);
+            boolean useCustomLayout = CustomNotifs.instance().getCustomLayoutPrefs(context);
+            if(useCustomLayout) {
+                notification.contentView = CustomLayoutGenerator.getInstance().makeCustomNormalLayoutFromPush(context, msg);
+
+                if (Build.VERSION.SDK_INT >= 19)
+                    notification = customizeBigContentView(notification, context, msg);
+            }
 
             return notification;
         }
